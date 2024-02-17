@@ -42,4 +42,5 @@ if ! echo "$url" | grep -qE '^https?://|^file://'; then
   exit 1
 fi
 #mpv --alang=jpn,jpa,jp,eng,en,fra,fre,fr --slang=eng,en,fra,fre,fr --really-quiet --no-terminal $url
-nix run 'nixpkgs#mpv' -- --alang=jpn,jpa,jp,eng,en,fra,fre,fr --slang=eng,en,fra,fre,fr --really-quiet --no-terminal $url
+#nix run 'nixpkgs#mpv' -- --alang=jpn,jpa,jp,eng,en,fra,fre,fr --slang=eng,en,fra,fre,fr --really-quiet --no-terminal $url
+nix-shell -p mpv --run "$(printf "%q " command mpv --alang=jpn,jpa,jp,eng,en,fra,fre,fr --slang=eng,en,fra,fre,fr --really-quiet --no-terminal $url)"
