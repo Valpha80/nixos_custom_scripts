@@ -1,0 +1,44 @@
+#!/bin/sh
+# For mpv-protocol.desktop:
+# Check with
+#   xdg-mime query default x-scheme-handler/mpv
+# Re-assign with (from same folder?)
+#   xdg-mime default mpv-protocol.desktop x-scheme-handler/mpv
+# Possibly Update with
+# sudo update-desktop-database
+#
+# For this script, put it in /usr/local/bin and make sure it's executable
+# chmod +x mpv-protocol
+# 
+# Can then test it with
+# (from any place) $ mpv-protocol mpv://http://server/path/video.mkv
+#
+# Can test whole chain with
+# xdg-open mpv://http://server/path/video.mkv
+
+echo "Full argument:$1"
+url=${1:6}
+echo $url
+
+#For some reason, when called through xdg-open in nixos; the ":" for the actual protocol gets removed!!
+# Add the missing : back in for file URLs
+if echo "$url" | grep -qE '^file//'; then
+    url=$(echo "$url" | sed 's|^file//|file://|')
+fi
+
+if echo "$url" | grep -qE '^http//'; then
+    url=$(echo "$url" | sed 's|^http//|http://|')
+fi
+
+if echo "$url" | grep -qE '^https//'; then
+    url=$(echo "$url" | sed 's|^https//|https://|')
+fi
+
+echo "FIXED: $url"
+
+#sh version
+if ! echo "$url" | grep -qE '^https?://|^file://'; then
+  echo "protocol not allowed"
+  exit 1
+fi
+mpv --alang=jpn,jpa,jp,eng,en,fra,fre,fr --slang=eng,en,fra,fre,fr --really-quiet --no-terminal $url
