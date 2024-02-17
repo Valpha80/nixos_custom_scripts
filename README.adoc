@@ -1,21 +1,26 @@
 = nixos_custom_scripts
 
-Small repo to try easily importing custom /bin/sh scripts into nixos installation
+Small repo to easily import custom /bin/sh scripts into nixos installation.
+
+Will import all scripts from *bin* folder and make them available on the PATH in nixos.
 
 == Usage in configuration.nix - inside home manager module
 
 .Add this in packages and adapt the sha256 value
+[source,haskell]
 ----
     home.packages = [
       #Try to support adding custom /bin/sh executable scripts from public github repo
       # https://www.reddit.com/r/NixOS/comments/k3acxu/is_there_a_declarative_way_to_have_shell_scripts/
       #(pkgs.fetchgit { url = "https://example.com/your-repo.git"; sha256 = lib.fakeSha256 /* nix will throw an error with the correct hash to use, replace this with that hash */; })
       (pkgs.fetchgit { url = "https://github.com/Valpha80/nixos_custom_scripts.git"; sha256 = "insertProperCommitHashHere-use-previous-line-to-get-latest"; })
-      #...
     ];
 ----
 
-.Also need to add mapping of x-scheme-handler/mpv into this "mpv-protocol" script that will be included in the path
+== Specific for mpv-protocol script
+
+.Also need to add mapping of x-scheme-handler/mpv to use this *mpv-protocol* script that will now be included in the path
+[source,haskell]
 ----
     xdg.desktopEntries.mpv-protocol = {
       name = "MPV protocol nixos";
@@ -30,3 +35,5 @@ Small repo to try easily importing custom /bin/sh scripts into nixos installatio
       terminal = false;
     };
 ----
+
+Known limitation; this works with Brave browser but fails due to some env configuration issue when run through xdg from Vivaldi browser.
