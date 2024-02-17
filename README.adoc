@@ -1,0 +1,13 @@
+= nixos_custom_scripts
+
+Small repo to try easily importing custom /bin/sh scripts into nixos installation
+
+== Usage in configuration.nix - inside home manager module
+
+----
+    home.packages = [
+      #Try to support adding custom /bin/sh executable scripts from public github repo
+      # https://www.reddit.com/r/NixOS/comments/k3acxu/is_there_a_declarative_way_to_have_shell_scripts/
+      #(pkgs.fetchgit { url = "https://example.com/your-repo.git"; sha256 = lib.fakeSha256 /* nix will throw an error with the correct hash to use, replace this with that hash */; })
+      (pkgs.fetchgit { url = "https://github.com/Valpha80/nixos_custom_scripts.git"; sha256 = "sha256-NpKZ2qX7MneYUR9quod/wEA2rlv2gLxIDASSyoPqbG0="; })
+----
