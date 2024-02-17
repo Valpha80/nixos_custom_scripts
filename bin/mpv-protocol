@@ -41,10 +41,13 @@ if ! echo "$url" | grep -qE '^https?://|^file://'; then
   echo "protocol not allowed"
   exit 1
 fi
-#mpv --alang=jpn,jpa,jp,eng,en,fra,fre,fr --slang=eng,en,fra,fre,fr --really-quiet --no-terminal $url
-#Trying to add unset of LD_LIBRARY_PATH because some browsers adapt it and break MPV usage through xdg...
-unset LD_LIBRARY_PATH; mpv --alang=jpn,jpa,jp,eng,en,fra,fre,fr --slang=eng,en,fra,fre,fr --really-quiet --no-terminal $url
+
+#Alternative ways to run mpv with parameters on nixos...
 #nix run 'nixpkgs#mpv' -- --alang=jpn,jpa,jp,eng,en,fra,fre,fr --slang=eng,en,fra,fre,fr --really-quiet --no-terminal $url
 #nix-shell -p mpv --run "$(printf "%q " command mpv --alang=jpn,jpa,jp,eng,en,fra,fre,fr --slang=eng,en,fra,fre,fr --really-quiet --no-terminal $url)"
-#Trying to debug why it won't run properly when started from xdg from a browser...
-#nix-shell -p mpv --run "env | sort > /home/valpha/Documents/nix-shell-env.txt"
+
+# Need to add unset of LD_LIBRARY_PATH because some browsers adapt it and break MPV usage through xdg
+# this should prevent errors
+#   mpv: symbol lookup error: mpv: undefined symbol: vkCreateXlibSurfaceKHR
+#   mpv: symbol lookup error: mpv: undefined symbol: vkCreateWaylandSurfaceKHR
+unset LD_LIBRARY_PATH; mpv --alang=jpn,jpa,jp,eng,en,fra,fre,fr --slang=eng,en,fra,fre,fr --really-quiet --no-terminal $url
