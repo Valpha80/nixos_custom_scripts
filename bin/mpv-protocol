@@ -43,4 +43,6 @@ if ! echo "$url" | grep -qE '^https?://|^file://'; then
 fi
 #mpv --alang=jpn,jpa,jp,eng,en,fra,fre,fr --slang=eng,en,fra,fre,fr --really-quiet --no-terminal $url
 #nix run 'nixpkgs#mpv' -- --alang=jpn,jpa,jp,eng,en,fra,fre,fr --slang=eng,en,fra,fre,fr --really-quiet --no-terminal $url
-nix-shell -p mpv --run "$(printf "%q " command mpv --alang=jpn,jpa,jp,eng,en,fra,fre,fr --slang=eng,en,fra,fre,fr --really-quiet --no-terminal $url)"
+#nix-shell -p mpv --run "$(printf "%q " command mpv --alang=jpn,jpa,jp,eng,en,fra,fre,fr --slang=eng,en,fra,fre,fr --really-quiet --no-terminal $url)"
+#Trying to debug why it won't run properly when started from xdg from a browser...
+nix-shell -p mpv --run "env | sort > /home/valpha/Documents/nix-shell-env.txt"
