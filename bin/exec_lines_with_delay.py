@@ -1,18 +1,31 @@
 #!/usr/bin/env python3
-# Try to make it executable without typing "python3 xxx.py ...", just "xxx.py ..."
 
-#import subprocess
 import time
 import argparse
-#import re
 import os
+import shlex
 
 def execute_commands_from_file(filename, delay):
     with open(filename, 'r') as file:
         for line in file:
-            # Only works with os.system; as using subprocess.run messes up with the different arguments provided in my case
+            # Parse the command line
+            args = shlex.split(line.strip())
+            
+            # Check if '-o' is in the command line arguments
+            if '-o' in args:
+                # Get the index of '-o' and use it to find the output file
+                output_file = args[args.index('-o') + 1]
+                
+                # Check if the output file already exists
+                if os.path.isfile(output_file):
+                    print(f"Skipping file {output_file} which already exists.")
+                    continue
+            
+            # Execute the command
             os.system(line.strip())
+            
             # Wait for the specified delay before executing the next command
+            print(f"Pause of {delay} seconds...")
             time.sleep(delay)
 
 if __name__ == "__main__":
